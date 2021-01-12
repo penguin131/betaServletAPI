@@ -1,6 +1,7 @@
 package edu.school21.cinema.servlets;
 
 import edu.school21.cinema.models.AuthInfo;
+import edu.school21.cinema.models.Image;
 import edu.school21.cinema.models.User;
 import edu.school21.cinema.repositories.CinemaRepository;
 import org.springframework.context.ApplicationContext;
@@ -28,7 +29,9 @@ public class ProfileServlet extends HttpServlet {
         req.setAttribute("user", user);
         List<AuthInfo> authInfos = cinemaRepository.getAuthInfos(user.getEmail());
         req.setAttribute("authInfos", authInfos);
-        String authUrl = "/WEB-INF/html/profile.jsp";
+        List<Image> images = cinemaRepository.getImages(user.getEmail());
+        req.setAttribute("images", images);
+        String authUrl = "/WEB-INF/jsp/profile.jsp";
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(authUrl);
         dispatcher.forward(req, resp);
     }

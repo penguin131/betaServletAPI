@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.IOException;
+import java.io.*;
 import java.util.Collection;
 
-@WebServlet("/images")
+@WebServlet("/images/*")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,
         maxFileSize = 1024 * 1024 * 5,
         maxRequestSize = 1024 * 1024 * 5 * 5)
@@ -45,8 +45,28 @@ public class ImageServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-//        req.getParameter()
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String imageId = req.getRequestURI().substring(req.getContextPath().length() + req.getServletPath().length() + 1);
+        Image dbImage = cinemaRepository.getImage(imageId);
+        if (dbImage != null) {
+            File image = imageFileService.getImageFile(imageId);
+            if (image == null) {
+                resp.sendError(404);
+            } else {
+                resp.setContentType(dbImage.getMime());
+                resp.setContentLength((int) image.length());
+                try (FileInputStream in = new FileInputStream(image);
+                     OutputStream out = resp.getOutputStream()) {
+                    byte[] buf = new byte[1024];
+                    int count;
+                    while ((count = in.read(buf)) >= 0) {
+                        out.write(buf, 0, count);
+                    }
+                }
+            }
+        } else {
+            resp.sendError(404);
+        }
     }
 
     @Override

@@ -11,6 +11,8 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Arrays;
 import java.util.List;
@@ -98,5 +100,39 @@ public class CinemaRepository {
                 image.getName())),
                 keyHolder);
         return keyHolder.getKey().longValue();
+    }
+
+    public List<Image> getImages(String email) {
+        String SELECT_IMAGE_QUERY = "select * from cinema_ex00.cinema.t_image " +
+                " where \"user\"=(select user_id from cinema_ex00.cinema.t_user where email=? limit 1)";
+        return jdbcTemplate.query(
+                SELECT_IMAGE_QUERY,
+                (rs, rowNum) -> getImageFromResultSet(rs),
+                email);
+    }
+
+    public Image getImage(String imageId) {
+        String SELECT_IMAGE_QUERY = "select * from cinema_ex00.cinema.t_image " +
+                " where image_id=?";
+        long id;
+        try {
+            id = Long.parseLong(imageId);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return jdbcTemplate.queryForObject(
+                SELECT_IMAGE_QUERY,
+                (rs, rowNum) -> getImageFromResultSet(rs),
+                id);
+    }
+
+    private Image getImageFromResultSet(ResultSet rs) throws SQLException {
+        Image image = new Image();
+        image.setSize(rs.getLong("size"));
+        image.setMime(rs.getString("mime"));
+        image.setId(rs.getLong("image_id"));
+        image.setName(rs.getString("name"));
+        return image;
     }
 }

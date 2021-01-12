@@ -73,7 +73,7 @@
                             <type>war</type>
                             <location>${project.build.directory}/${project.build.finalName}.war</location>
                             <properties>
-                                <context>/</context>
+                                <context>/cinema/</context>
                             </properties>
                         </deployable>
                     </deployables>
