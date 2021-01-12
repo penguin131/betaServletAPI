@@ -38,5 +38,9 @@
             </tr>
         </c:forEach>
     </table>
+
+    <form method="post" action="images" enctype="multipart/form-data">
+        Choose a file: <input type="file" name="uploadFile"/><input type="submit" value="Upload"/>
+    </form>
 </body>
 </html>

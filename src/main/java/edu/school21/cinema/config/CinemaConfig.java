@@ -1,6 +1,7 @@
 package edu.school21.cinema.config;
 
 import edu.school21.cinema.repositories.CinemaRepository;
+import edu.school21.cinema.services.ImageFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,5 +43,14 @@ public class CinemaConfig {
     @Bean
     public CinemaRepository userRepository() {
         return new CinemaRepository();
+    }
+
+    @Bean
+    public ImageFileService imageFileService() {
+        return new ImageFileService();
+    }
+
+    public String getFileStoragePath() {
+        return this.env.getProperty("storage.path");
     }
 }

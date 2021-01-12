@@ -1,14 +1,18 @@
 package edu.school21.cinema.repositories;
 
 import edu.school21.cinema.models.AuthInfo;
+import edu.school21.cinema.models.Image;
 import edu.school21.cinema.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.PreparedStatement;
+import java.sql.Types;
+import java.util.Arrays;
 import java.util.List;
 
 public class CinemaRepository {
@@ -17,11 +21,10 @@ public class CinemaRepository {
     @Autowired
     private PasswordEncoder encoder;
 
-    /*
-        User
-     */
+    /* User */
     public void saveUser(final User user) {
-        String INSERT_USER_QUERY = "insert into cinema_ex00.cinema.t_user (name, family, email, phone_number, password) VALUES (?,?,?,?,?)";
+        String INSERT_USER_QUERY = "insert into cinema_ex00.cinema.t_user (name, family, email, phone_number, password) " +
+                " VALUES (?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(INSERT_USER_QUERY);
@@ -50,9 +53,7 @@ public class CinemaRepository {
                 email);
     }
 
-    /*
-        Auth info
-     */
+    /* Auth info */
     public List<AuthInfo> getAuthInfos(String email) {
         String SELECT_AUTH_INFO_QUERY = "select * from cinema_ex00.cinema.t_auth_info " +
                 " where \"user\"=(select user_id from cinema_ex00.cinema.t_user where email=? limit 1)";
@@ -80,8 +81,22 @@ public class CinemaRepository {
         }, keyHolder);
     }
 
-    /*
-        Images
-     */
-//    public void saveImage
+    /* Images */
+    public long saveImage(Image image) {
+        String INSERT_IMAGE_QUERY = "insert into cinema_ex00.cinema.t_image (\"user\", size, mime, name) " +
+                " VALUES ((select user_id from cinema_ex00.cinema.t_user where email=? limit 1), ?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        PreparedStatementCreatorFactory preparedStatementCreatorFactory = new PreparedStatementCreatorFactory(
+                INSERT_IMAGE_QUERY, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR);
+        preparedStatementCreatorFactory.setReturnGeneratedKeys(true);
+        preparedStatementCreatorFactory.setGeneratedKeysColumnNames("image_id");
+        jdbcTemplate.update(preparedStatementCreatorFactory.newPreparedStatementCreator(Arrays.asList(
+                image.getUser().getEmail(),
+                image.getSize(),
+                image.getMime(),
+                image.getName())),
+                keyHolder);
+        return keyHolder.getKey().longValue();
+    }
 }
