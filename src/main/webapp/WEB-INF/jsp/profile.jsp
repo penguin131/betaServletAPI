@@ -54,8 +54,8 @@
         </tr>
         <c:forEach items="${images}" var="element">
             <tr>
-                <td><a target="_blank" rel="noopener noreferrer" href="/images/${element.id}">${element.name}</a></td>
-                <td>${element.size}</td>
+                <td><a target="_blank" rel="noopener noreferrer" href="${pageContext.request.contextPath}/images/${element.id}">${element.name}</a></td>
+                <td>${element.sizeString}</td>
                 <td>${element.mime}</td>
             </tr>
         </c:forEach>

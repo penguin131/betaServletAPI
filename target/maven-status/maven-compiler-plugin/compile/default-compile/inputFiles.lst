@@ -1,0 +1,13 @@
+/Users/bootcamp/Desktop/ServletAPI/src/main/java/edu/school21/cinema/servlets/SignUpServlet.java
+/Users/bootcamp/Desktop/ServletAPI/src/main/java/edu/school21/cinema/filters/AuthFilter.java
+/Users/bootcamp/Desktop/ServletAPI/src/main/java/edu/school21/cinema/servlets/SignInServlet.java
+/Users/bootcamp/Desktop/ServletAPI/src/main/java/edu/school21/cinema/repositories/CinemaRepository.java
+/Users/bootcamp/Desktop/ServletAPI/src/main/java/edu/school21/cinema/models/AuthInfo.java
+/Users/bootcamp/Desktop/ServletAPI/src/main/java/edu/school21/cinema/models/Image.java
+/Users/bootcamp/Desktop/ServletAPI/src/main/java/edu/school21/cinema/services/DateConvertUtil.java
+/Users/bootcamp/Desktop/ServletAPI/src/main/java/edu/school21/cinema/listeners/CinemaServletContextListener.java
+/Users/bootcamp/Desktop/ServletAPI/src/main/java/edu/school21/cinema/config/CinemaConfig.java
+/Users/bootcamp/Desktop/ServletAPI/src/main/java/edu/school21/cinema/servlets/ImageServlet.java
+/Users/bootcamp/Desktop/ServletAPI/src/main/java/edu/school21/cinema/models/User.java
+/Users/bootcamp/Desktop/ServletAPI/src/main/java/edu/school21/cinema/servlets/ProfileServlet.java
+/Users/bootcamp/Desktop/ServletAPI/src/main/java/edu/school21/cinema/services/ImageFileService.java

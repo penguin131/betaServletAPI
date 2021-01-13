@@ -21,6 +21,16 @@ public class Image implements Serializable {
         return size;
     }
 
+    public String getSizeString() {
+        if (size < 1024) {
+            return String.format("%d Bytes", size);
+        } else if (size < 1024 * 1024) {
+            return String.format("%d KB", size / 1024);
+        } else {
+            return String.format("%d MB", size / (1024 * 1024));
+        }
+    }
+
     public void setSize(long size) {
         this.size = size;
     }
