@@ -6,7 +6,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./src/main/resources/sql/schema.sql
+      - ./src/main/resources/sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     environment:
       - POSTGRES_USER=sammy
       - POSTGRES_PASSWORD=123

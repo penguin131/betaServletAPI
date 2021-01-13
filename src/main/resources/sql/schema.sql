@@ -1,3 +1,32 @@
+
+BEGIN;
+
+DO $$
+    BEGIN
+        IF (SELECT count(*) FROM pg_user WHERE usename='sammy')=0 THEN
+            create user sammy
+                superuser
+                createdb
+                createrole;
+        END IF;
+    END
+$$;
+
+
+DO $$
+    BEGIN
+        IF (SELECT count(*) FROM pg_user WHERE usename='postgres')=0 THEN
+            create user postgres
+                superuser
+                createdb
+                createrole
+                replication
+                bypassrls;
+        END IF;
+    END
+$$;
+commit;
+
 --
 -- PostgreSQL database dump
 --
@@ -15,14 +44,9 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
-
-DROP DATABASE IF EXISTS postgres;
 --
 -- Name: postgres; Type: DATABASE; Schema: -; Owner: sammy
 --
-
-CREATE DATABASE postgres WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'en_US.utf8';
-
 
 ALTER DATABASE postgres OWNER TO sammy;
 
