@@ -4,6 +4,7 @@ import edu.school21.cinema.models.AuthInfo;
 import edu.school21.cinema.models.Image;
 import edu.school21.cinema.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -16,6 +17,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class CinemaRepository {
     @Autowired
@@ -99,7 +101,7 @@ public class CinemaRepository {
                 image.getMime(),
                 image.getName())),
                 keyHolder);
-        return keyHolder.getKey().longValue();
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
     public List<Image> getImages(String email) {
@@ -117,14 +119,17 @@ public class CinemaRepository {
         long id;
         try {
             id = Long.parseLong(imageId);
+            return jdbcTemplate.queryForObject(
+                    SELECT_IMAGE_QUERY,
+                    (rs, rowNum) -> getImageFromResultSet(rs),
+                    id);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            System.out.println("NumberFormatException exception: " + e.getMessage());
+            return null;
+        } catch (DataAccessException e) {
+            System.out.println("Sql request exception: " + e.getMessage());
             return null;
         }
-        return jdbcTemplate.queryForObject(
-                SELECT_IMAGE_QUERY,
-                (rs, rowNum) -> getImageFromResultSet(rs),
-                id);
     }
 
     private Image getImageFromResultSet(ResultSet rs) throws SQLException {
