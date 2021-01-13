@@ -32,14 +32,16 @@ public class ImageServlet extends HttpServlet {
 
         Collection<Part> parts = req.getParts();
         for (Part part : parts) {
-            Image newImage = new Image();
-            User user = (User) req.getSession().getAttribute("user");
-            newImage.setUser(user);
-            newImage.setName(part.getSubmittedFileName());
-            newImage.setSize(part.getSize());
-            newImage.setMime(part.getContentType());
-            long imageId = cinemaRepository.saveImage(newImage);
-            imageFileService.saveImage(imageId, part);
+            if (part.getSize() > 0) {
+                Image newImage = new Image();
+                User user = (User) req.getSession().getAttribute("user");
+                newImage.setUser(user);
+                newImage.setName(part.getSubmittedFileName());
+                newImage.setSize(part.getSize());
+                newImage.setMime(part.getContentType());
+                long imageId = cinemaRepository.saveImage(newImage);
+                imageFileService.saveImage(imageId, part);
+            }
         }
         resp.sendRedirect(req.getContextPath() + "/profile");
     }

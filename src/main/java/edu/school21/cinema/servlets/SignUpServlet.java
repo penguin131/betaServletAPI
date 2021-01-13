@@ -21,6 +21,7 @@ public class SignUpServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
         User user = new User();
         user.setName(req.getParameter("name"));
         user.setFamily(req.getParameter("family"));
