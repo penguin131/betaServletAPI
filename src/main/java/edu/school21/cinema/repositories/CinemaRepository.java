@@ -43,18 +43,23 @@ public class CinemaRepository {
 
     public User getUserForEmail(String email) {
         String SELECT_USER_QUERY = "select * from postgres.cinema.t_user where email=? limit 1";
-        return jdbcTemplate.queryForObject(
-                SELECT_USER_QUERY,
-                (rs, rowNum) -> {
-                    User user = new User();
-                    user.setEmail(rs.getString("email"));
-                    user.setPassword(rs.getString("password"));
-                    user.setName(rs.getString("name"));
-                    user.setFamily(rs.getString("family"));
-                    user.setPhoneNumber(rs.getString("phone_number"));
-                    return user;
-                },
-                email);
+        try {
+            return jdbcTemplate.queryForObject(
+                    SELECT_USER_QUERY,
+                    (rs, rowNum) -> {
+                        User user = new User();
+                        user.setEmail(rs.getString("email"));
+                        user.setPassword(rs.getString("password"));
+                        user.setName(rs.getString("name"));
+                        user.setFamily(rs.getString("family"));
+                        user.setPhoneNumber(rs.getString("phone_number"));
+                        return user;
+                    },
+                    email);
+        } catch (DataAccessException e) {
+            System.out.println("DataAccessException: " + e.getMessage());
+            return null;
+        }
     }
 
     /* Auth info */

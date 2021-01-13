@@ -21,15 +21,19 @@ public class SignUpServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.setCharacterEncoding("UTF-8");
-        User user = new User();
-        user.setName(req.getParameter("name"));
-        user.setFamily(req.getParameter("family"));
-        user.setEmail(req.getParameter("email"));
-        user.setPhoneNumber(req.getParameter("phoneNumber"));
-        user.setPassword(req.getParameter("password"));
-        cinemaRepository.saveUser(user);
-        resp.sendRedirect(req.getContextPath() + "/signIn");
+        if (cinemaRepository.getUserForEmail(req.getParameter("email")) == null) {
+            req.setCharacterEncoding("UTF-8");
+            User user = new User();
+            user.setName(req.getParameter("name"));
+            user.setFamily(req.getParameter("family"));
+            user.setEmail(req.getParameter("email"));
+            user.setPhoneNumber(req.getParameter("phoneNumber"));
+            user.setPassword(req.getParameter("password"));
+            cinemaRepository.saveUser(user);
+            resp.sendRedirect(req.getContextPath() + "/signIn");
+        } else {
+            resp.sendError(409, "User already exist");
+        }
     }
 
     @Override

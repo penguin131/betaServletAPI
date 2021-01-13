@@ -36,7 +36,7 @@ public class SignInServlet extends HttpServlet {
                 session.setAttribute("user", user);
                 resp.sendRedirect(req.getContextPath() + "/profile");
             } else {
-                resp.sendRedirect(req.getContextPath() + "/signIn");
+                resp.sendError(403);
             }
         }
     }
