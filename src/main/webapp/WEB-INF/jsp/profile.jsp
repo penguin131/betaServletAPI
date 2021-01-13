@@ -40,8 +40,9 @@
         </c:forEach>
     </table>
 
-    <form method="post" action="images" enctype="multipart/form-data">
-        Choose a file: <input type="file" name="uploadFile"/><input type="submit" value="Upload"/>
+    <form id="image-form" method="post" action="${pageContext.request.contextPath}/images" enctype="multipart/form-data">
+        Choose a file: <input id="download-image" type="file" name="uploadFile"/>
+        <input type="submit" value="Upload"/>
     </form>
 
     Images:<br/>
@@ -53,11 +54,30 @@
         </tr>
         <c:forEach items="${images}" var="element">
             <tr>
-                <td><a target="_blank" rel="noopener noreferrer" href="/cinema/images/${element.id}">${element.name}</a></td>
+                <td><a target="_blank" rel="noopener noreferrer" href="/images/${element.id}">${element.name}</a></td>
                 <td>${element.size}</td>
                 <td>${element.mime}</td>
             </tr>
         </c:forEach>
     </table>
 </body>
+<script type="text/javascript">
+    document.getElementById('image-form').onsubmit = function onSubmit() {
+        if (document.getElementById('download-image').files.length < 1) {
+            alert("Please choose file");
+            return false;
+        }
+        const file = document.getElementById('download-image').files[0];
+        const fileType = file['type'];
+        const validImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/bmp'];
+        if (!validImageTypes.includes(fileType)) {
+            alert("Invalid image type");
+            return false;
+        }
+        if (file.size > 1024 * 1024 * 5) {
+            alert("Max file size 5 MiB!");
+            return false;
+        }
+    };
+</script>
 </html>
