@@ -16,17 +16,17 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-DROP DATABASE IF EXISTS cinema_ex00;
+DROP DATABASE IF EXISTS postgres;
 --
--- Name: cinema_ex00; Type: DATABASE; Schema: -; Owner: sammy
+-- Name: postgres; Type: DATABASE; Schema: -; Owner: sammy
 --
 
-CREATE DATABASE cinema_ex00 WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'en_US.utf8';
+CREATE DATABASE postgres WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'en_US.utf8';
 
 
-ALTER DATABASE cinema_ex00 OWNER TO sammy;
+ALTER DATABASE postgres OWNER TO sammy;
 
-\connect cinema_ex00
+\connect postgres
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -38,6 +38,13 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
+--
+-- Name: DATABASE postgres; Type: COMMENT; Schema: -; Owner: sammy
+--
+
+COMMENT ON DATABASE postgres IS 'default administrative connection database';
+
 
 --
 -- Name: cinema; Type: SCHEMA; Schema: -; Owner: sammy
@@ -182,6 +189,25 @@ ALTER TABLE ONLY cinema.t_image ALTER COLUMN image_id SET DEFAULT nextval('cinem
 --
 
 ALTER TABLE ONLY cinema.t_user ALTER COLUMN user_id SET DEFAULT nextval('cinema.t_user_user_id_seq'::regclass);
+
+
+--
+-- Data for Name: t_auth_info; Type: TABLE DATA; Schema: cinema; Owner: sammy
+--
+
+
+
+--
+-- Data for Name: t_image; Type: TABLE DATA; Schema: cinema; Owner: sammy
+--
+
+
+
+--
+-- Data for Name: t_user; Type: TABLE DATA; Schema: cinema; Owner: sammy
+--
+
+
 
 --
 -- Name: t_auth_auth_id_seq; Type: SEQUENCE SET; Schema: cinema; Owner: sammy

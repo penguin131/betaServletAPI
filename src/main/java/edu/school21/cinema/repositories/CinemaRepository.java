@@ -27,7 +27,7 @@ public class CinemaRepository {
 
     /* User */
     public void saveUser(final User user) {
-        String INSERT_USER_QUERY = "insert into cinema_ex00.cinema.t_user (name, family, email, phone_number, password) " +
+        String INSERT_USER_QUERY = "insert into postgres.cinema.t_user (name, family, email, phone_number, password) " +
                 " VALUES (?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
@@ -42,7 +42,7 @@ public class CinemaRepository {
     }
 
     public User getUserForEmail(String email) {
-        String SELECT_USER_QUERY = "select * from cinema_ex00.cinema.t_user where email=? limit 1";
+        String SELECT_USER_QUERY = "select * from postgres.cinema.t_user where email=? limit 1";
         return jdbcTemplate.queryForObject(
                 SELECT_USER_QUERY,
                 (rs, rowNum) -> {
@@ -59,8 +59,8 @@ public class CinemaRepository {
 
     /* Auth info */
     public List<AuthInfo> getAuthInfos(String email) {
-        String SELECT_AUTH_INFO_QUERY = "select * from cinema_ex00.cinema.t_auth_info " +
-                " where \"user\"=(select user_id from cinema_ex00.cinema.t_user where email=? limit 1)";
+        String SELECT_AUTH_INFO_QUERY = "select * from postgres.cinema.t_auth_info " +
+                " where \"user\"=(select user_id from postgres.cinema.t_user where email=? limit 1)";
         return jdbcTemplate.query(
                 SELECT_AUTH_INFO_QUERY,
                 (rs, rowNum)-> {
@@ -73,8 +73,8 @@ public class CinemaRepository {
     }
 
     public void saveAuthInfo(AuthInfo authInfo) {
-        String INSERT_AUTH_INFO_QUERY = "insert into cinema_ex00.cinema.t_auth_info (time, \"user\", ip) " +
-                " values (?, (select user_id from cinema_ex00.cinema.t_user where email=? limit 1), ?)";
+        String INSERT_AUTH_INFO_QUERY = "insert into postgres.cinema.t_auth_info (time, \"user\", ip) " +
+                " values (?, (select user_id from postgres.cinema.t_user where email=? limit 1), ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(INSERT_AUTH_INFO_QUERY);
@@ -87,8 +87,8 @@ public class CinemaRepository {
 
     /* Images */
     public long saveImage(Image image) {
-        String INSERT_IMAGE_QUERY = "insert into cinema_ex00.cinema.t_image (\"user\", size, mime, name) " +
-                " VALUES ((select user_id from cinema_ex00.cinema.t_user where email=? limit 1), ?, ?, ?)";
+        String INSERT_IMAGE_QUERY = "insert into postgres.cinema.t_image (\"user\", size, mime, name) " +
+                " VALUES ((select user_id from postgres.cinema.t_user where email=? limit 1), ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         PreparedStatementCreatorFactory preparedStatementCreatorFactory = new PreparedStatementCreatorFactory(
@@ -105,8 +105,8 @@ public class CinemaRepository {
     }
 
     public List<Image> getImages(String email) {
-        String SELECT_IMAGE_QUERY = "select * from cinema_ex00.cinema.t_image " +
-                " where \"user\"=(select user_id from cinema_ex00.cinema.t_user where email=? limit 1)";
+        String SELECT_IMAGE_QUERY = "select * from postgres.cinema.t_image " +
+                " where \"user\"=(select user_id from postgres.cinema.t_user where email=? limit 1)";
         return jdbcTemplate.query(
                 SELECT_IMAGE_QUERY,
                 (rs, rowNum) -> getImageFromResultSet(rs),
@@ -114,7 +114,7 @@ public class CinemaRepository {
     }
 
     public Image getImage(String imageId) {
-        String SELECT_IMAGE_QUERY = "select * from cinema_ex00.cinema.t_image " +
+        String SELECT_IMAGE_QUERY = "select * from postgres.cinema.t_image " +
                 " where image_id=?";
         long id;
         try {
