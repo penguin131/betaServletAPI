@@ -25,7 +25,6 @@ public class CinemaRepository {
     @Autowired
     private PasswordEncoder encoder;
 
-    /* User */
     public void saveUser(final User user) {
         String INSERT_USER_QUERY = "insert into postgres.cinema.t_user (name, family, email, phone_number, password) " +
                 " VALUES (?,?,?,?,?)";
@@ -62,7 +61,6 @@ public class CinemaRepository {
         }
     }
 
-    /* Auth info */
     public List<AuthInfo> getAuthInfos(String email) {
         String SELECT_AUTH_INFO_QUERY = "select * from postgres.cinema.t_auth_info " +
                 " where \"user\"=(select user_id from postgres.cinema.t_user where email=? limit 1)";
@@ -90,7 +88,6 @@ public class CinemaRepository {
         }, keyHolder);
     }
 
-    /* Images */
     public long saveImage(Image image) {
         String INSERT_IMAGE_QUERY = "insert into postgres.cinema.t_image (\"user\", size, mime, name) " +
                 " VALUES ((select user_id from postgres.cinema.t_user where email=? limit 1), ?, ?, ?)";
